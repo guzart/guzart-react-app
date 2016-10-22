@@ -70,12 +70,12 @@ module.exports = {
     // We use `fallback` instead of `root` because we want `node_modules` to "win"
     // if there any conflicts. This matches Node resolution mechanism.
     // https://github.com/facebookincubator/create-react-app/issues/253
-    fallback: paths.nodePaths,
+    modules: ['node_modules'].concat(paths.nodePaths),
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
     // https://github.com/facebookincubator/create-react-app/issues/290
-    extensions: ['.js', '.json', '.jsx', ''],
+    extensions: ['.js', '.json', '.jsx'],
     alias: {
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
@@ -86,27 +86,31 @@ module.exports = {
   // Resolve loaders (webpack plugins for CSS, images, transpilation) from the
   // directory of `react-scripts` itself rather than the project directory.
   resolveLoader: {
-    root: paths.ownNodeModules,
-    moduleTemplates: ['*-loader'],
+    modules: [paths.ownNodeModules, 'node_modules'],
+    moduleExtensions: ['-loader'],
   },
 
   module: {
-    // First, run the linter.
-    // It's important to do this before Babel processes the JS.
-    preLoaders: [
+    rules: [
       {
+        // First, run the linter.
+        // It's important to do this before Babel processes the JS.
+        enforce: 'pre',
         test: /\.(js|jsx)$/,
-        loader: 'eslint',
         include: paths.appSrc,
+        loader: 'eslint-loader',
+        options: {
+          // Point ESLint to our predefined config.
+          configFile: path.join(__dirname, '../.eslintrc'),
+          useEslintrc: false,
+        },
       },
-    ],
-    loaders: [
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,
         loader: 'babel',
-        query: {
+        options: {
           babelrc: false,
           presets: [require.resolve('babel-preset-guzart-react-app')],
           // This is a feature of `babel-loader` for webpack (not Babel itself).
@@ -125,7 +129,26 @@ module.exports = {
       // in development "style" loader enables hot editing of CSS.
       {
         test: /\.css$/,
-        loader: 'style!css?importLoaders=1!postcss',
+        use: [
+          'style',
+          { loader: 'css', options: { importLoaders: 1 } },
+          // We use PostCSS for autoprefixing only.
+          {
+            loader: 'postcss',
+            options: {
+              plugins: () => [
+                autoprefixer({
+                  browsers: [
+                    '>1%',
+                    'last 4 versions',
+                    'Firefox ESR',
+                    'not ie < 9', // React doesn't support IE8 anyway
+                  ],
+                }),
+              ],
+            },
+          },
+        ],
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
       // allow it implicitly so we also enable it.
@@ -139,7 +162,7 @@ module.exports = {
       {
         test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
         loader: 'file',
-        query: {
+        options: {
           name: 'static/media/[name].[hash:8].[ext]',
         },
       },
@@ -148,31 +171,13 @@ module.exports = {
       {
         test: /\.(mp4|webm|wav|mp3|m4a|aac|oga)(\?.*)?$/,
         loader: 'url',
-        query: {
+        options: {
           limit: 10000,
           name: 'static/media/[name].[hash:8].[ext]',
         },
       },
     ],
   },
-
-  // Point ESLint to our predefined config.
-  eslint: {
-    configFile: path.join(__dirname, '../.eslintrc'),
-    useEslintrc: false,
-  },
-
-  // We use PostCSS for autoprefixing only.
-  postcss: () => [
-    autoprefixer({
-      browsers: [
-        '>1%',
-        'last 4 versions',
-        'Firefox ESR',
-        'not ie < 9', // React doesn't support IE8 anyway
-      ],
-    }),
-  ],
 
   plugins: [
     // Makes the public URL available as %PUBLIC_URL% in index.html, e.g.:
