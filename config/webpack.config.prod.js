@@ -113,7 +113,7 @@
 //         // @remove-on-eject-begin
 //         query: {
 //           babelrc: false,
-//           presets: [require.resolve('babel-preset-react-app')],
+//           presets: [require.resolve('babel-preset-guzart-react-app')],
 //         },
 //         // @remove-on-eject-end
 //       },
