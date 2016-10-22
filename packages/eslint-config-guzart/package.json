@@ -1,0 +1,21 @@
+{
+  "name": "eslint-config-guzart",
+  "version": "0.1.0",
+  "description": "Guzat ESLint config",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/guzart/guzart-react-app.git"
+  },
+  "author": "Arturo Guzman",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.8.1",
+    "eslint-plugin-import": "^1.16.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.4.1"
+  },
+  "dependencies": {
+    "eslint-config-airbnb": "^12.0.0"
+  }
+}
