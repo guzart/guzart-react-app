@@ -13,7 +13,6 @@ const detect = require('detect-port');
 const clearConsole = require('react-dev-utils/clearConsole');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
-const openBrowser = require('react-dev-utils/openBrowser');
 const prompt = require('react-dev-utils/prompt');
 const config = require('../config/webpack.config.dev');
 const paths = require('../config/paths');
@@ -144,8 +143,7 @@ function runDevServer(compiler, host, port, protocol) {
 
     clearConsole();
     log(chalk.cyan('Starting the development server...'));
-    log();
-    return openBrowser(`${protocol}://${host}:${port}/`);
+    return log();
   });
 
   return devServer;
