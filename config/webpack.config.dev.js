@@ -127,10 +127,16 @@ module.exports = {
       // In production, we use a plugin to extract that CSS to a file, but
       // in development "style" loader enables hot editing of CSS.
       {
-        test: /\.css$/,
+        test: /\.s?css$/,
         use: [
           'style',
-          { loader: 'css', options: { importLoaders: 1 } },
+          {
+            loader: 'css',
+            options: {
+              importLoaders: 1,
+              sourceMap: true,
+            },
+          },
           // We use PostCSS for autoprefixing only.
           {
             loader: 'postcss',
@@ -145,6 +151,13 @@ module.exports = {
                   ],
                 }),
               ],
+              sourceMap: 'inline',
+            },
+          },
+          {
+            loader: 'sass',
+            options: {
+              sourceMap: true,
             },
           },
         ],
