@@ -12,7 +12,7 @@ function getClientEnvironment(publicUrl) {
       env[key] = JSON.stringify(process.env[key]); // eslint-disable-line no-param-reassign
       return env;
     }, {
-      NODE_ENV: JSON.stringify(process.node.NODE_ENV || 'development'),
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
       PUBLIC_URL: JSON.stringify(publicUrl),
     });
 
