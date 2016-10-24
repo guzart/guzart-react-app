@@ -135,6 +135,7 @@ module.exports = {
           {
             loader: 'css',
             options: {
+              modules: true,
               importLoaders: 1,
               sourceMap: true,
             },
