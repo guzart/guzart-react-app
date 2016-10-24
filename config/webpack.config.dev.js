@@ -99,11 +99,6 @@ module.exports = {
         test: /\.(js|jsx)$/,
         include: paths.appSrc,
         loader: 'eslint',
-        options: {
-          // Point ESLint to our predefined config.
-          configFile: path.join(__dirname, '../.eslintrc'),
-          useEslintrc: false,
-        },
       },
       // Process JS with Babel.
       {
