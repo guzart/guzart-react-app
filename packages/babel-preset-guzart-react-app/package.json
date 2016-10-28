@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-guzart-react-app",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Guzart react app babel preset",
   "main": "index.js",
   "repository": {
