@@ -145,6 +145,7 @@ module.exports = {
           {
             loader: 'css',
             options: {
+              localIdentName: '[path][name]___[local]___[hash:base64:5]',
               modules: true,
               importLoaders: 1,
               sourceMap: true,
