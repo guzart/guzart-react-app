@@ -1,4 +1,3 @@
-const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const findCacheDir = require('find-cache-dir');
@@ -8,6 +7,8 @@ const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
 const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+
+const appPackageJson = require(paths.appPackageJson); // eslint-disable-line
 
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
@@ -20,6 +21,21 @@ const publicUrl = '';
 
 // // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
+
+const ensureArray = value => (value.push ? value : [value]);
+
+function addCustomBabelInclude(baseInclude) {
+  const base = baseInclude.push ? baseInclude : [baseInclude];
+  const appConfig = appPackageJson.guzartReactApp;
+  if (!appConfig || !appConfig.babel || !appConfig.babel.include) {
+    return base;
+  }
+
+  const appInclude = appConfig.babel.include;
+  return ensureArray(base)
+    .concat(ensureArray(appInclude))
+    .map(paths.resolveAppPath);
+}
 
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
@@ -76,7 +92,7 @@ module.exports = {
     extensions: ['.js', '.json', '.jsx'],
     alias: {
       // Support the own application as a package
-      [require(paths.appPackageJson).name]: paths.appSrc, // eslint-disable-line
+      [appPackageJson.name]: paths.appSrc,
       // Support React Native Web
       // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
       'react-native': 'react-native-web',
@@ -103,7 +119,7 @@ module.exports = {
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
-        include: paths.appSrc,
+        include: addCustomBabelInclude(paths.appSrc),
         loader: 'babel',
         options: {
           babelrc: false,

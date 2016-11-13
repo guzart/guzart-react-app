@@ -4,7 +4,7 @@ const fs = require('fs');
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.env.PWD || process.cwd());
-function resolveApp(relativePath) {
+function resolveAppPath(relativePath) {
   return path.resolve(appDirectory, relativePath);
 }
 
@@ -22,7 +22,7 @@ function resolveApp(relativePath) {
 const nodePaths = (process.env.NODE_PATH || '')
   .split(process.platform === 'win32' ? ';' : ':')
   .filter(Boolean)
-  .map(resolveApp);
+  .map(resolveAppPath);
 
 function resolveOwn(relativePath) {
   return path.resolve(__dirname, relativePath);
@@ -30,15 +30,16 @@ function resolveOwn(relativePath) {
 
 // config before eject: we're in ./node_modules/react-scripts/config/
 module.exports = {
-  appBuild: resolveApp('build'),
-  appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
-  appIndexJs: resolveApp('src/index.js'),
-  appPackageJson: resolveApp('package.json'),
-  appSrc: resolveApp('src'),
-  testsSetup: resolveApp('src/setupTests.js'),
-  appNodeModules: resolveApp('node_modules'),
+  appBuild: resolveAppPath('build'),
+  appPublic: resolveAppPath('public'),
+  appHtml: resolveAppPath('public/index.html'),
+  appIndexJs: resolveAppPath('src/index.js'),
+  appPackageJson: resolveAppPath('package.json'),
+  appSrc: resolveAppPath('src'),
+  testsSetup: resolveAppPath('src/setupTests.js'),
+  appNodeModules: resolveAppPath('node_modules'),
   // this is empty with npm3 but node resolution searches higher anyway:
   ownNodeModules: resolveOwn('../node_modules'),
+  resolveAppPath,
   nodePaths,
 };
