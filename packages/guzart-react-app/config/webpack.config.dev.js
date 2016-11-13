@@ -22,7 +22,7 @@ const publicUrl = '';
 // // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
 
-const ensureArray = value => (value.push ? value : [value]);
+const ensureArray = value => (value.push ? value : [value].filter(v => v));
 
 function addCustomBabelInclude(baseInclude) {
   const base = baseInclude.push ? baseInclude : [baseInclude];
@@ -31,10 +31,9 @@ function addCustomBabelInclude(baseInclude) {
     return base;
   }
 
-  const appInclude = appConfig.babel.include;
+  const appInclude = ensureArray(appConfig.babel.include);
   return ensureArray(base)
-    .concat(ensureArray(appInclude))
-    .map(paths.resolveAppPath);
+    .concat(appInclude.map(paths.resolveRealAppPath));
 }
 
 // This is the development configuration.

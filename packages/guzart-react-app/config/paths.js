@@ -8,6 +8,13 @@ function resolveAppPath(relativePath) {
   return path.resolve(appDirectory, relativePath);
 }
 
+function resolveRealAppPath(relativePath) {
+  // Use fs.realpathSync because webpack resolves symlinks and
+  // there is a mismatch with paths from packages
+  // https://github.com/webpack/webpack/issues/1643
+  return fs.realpathSync(resolveAppPath(relativePath));
+}
+
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
 // https://github.com/facebookincubator/create-react-app/issues/253.
@@ -41,5 +48,6 @@ module.exports = {
   // this is empty with npm3 but node resolution searches higher anyway:
   ownNodeModules: resolveOwn('../node_modules'),
   resolveAppPath,
+  resolveRealAppPath,
   nodePaths,
 };
