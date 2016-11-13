@@ -1,0 +1,11 @@
+---
+
+rules:
+  class-name-format:
+    - 1
+    - convention: camelcase
+
+  no-misspelled-properties:
+    - 1
+    - extra-properties:
+      - composes

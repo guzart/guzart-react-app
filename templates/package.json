@@ -1,0 +1,9 @@
+{
+  "name": "guzart-react-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "react-app start",
+    "build": "react-app build"
+  }
+}
