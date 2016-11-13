@@ -1,6 +1,6 @@
 {
   "name": "guzart-react-app",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "react app utilities",
   "main": "index.js",
   "bin": {
@@ -23,7 +23,7 @@
     "autoprefixer": "6.5.3",
     "babel-core": "6.18.2",
     "babel-loader": "6.2.7",
-    "babel-preset-guzart-react-app": "0.2.1",
+    "babel-preset-guzart-react-app": "^0.3.0",
     "case-sensitive-paths-webpack-plugin": "1.1.4",
     "chalk": "1.1.3",
     "cross-spawn": "5.0.1",
