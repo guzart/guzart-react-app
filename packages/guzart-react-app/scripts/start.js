@@ -132,6 +132,8 @@ function runDevServer(compiler, host, port, protocol) {
     },
     // Enable HTTPS if the HTTPS environment variable is set to 'true'
     https: protocol === 'https',
+    // Server index.html instead of 404 to account for react-router
+    historyApiFallback: true,
     host,
   });
 
