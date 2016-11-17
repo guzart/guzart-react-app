@@ -1,3 +1,4 @@
+const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const findCacheDir = require('find-cache-dir');
@@ -153,22 +154,23 @@ module.exports = {
             },
           },
           // We use PostCSS for autoprefixing only.
-          {
-            loader: 'postcss',
-            options: {
-              plugins: () => [
-                autoprefixer({
-                  browsers: [
-                    '>1%',
-                    'last 4 versions',
-                    'Firefox ESR',
-                    'not ie < 9', // React doesn't support IE8 anyway
-                  ],
-                }),
-              ],
-              sourceMap: 'inline',
-            },
-          },
+          // TODO: Re-enable post css with autoprefixer, issues with configuration for webpack 2
+          // {
+          //   loader: 'postcss',
+          //   options: {
+          //     plugins: () => [
+          //       autoprefixer({
+          //         browsers: [
+          //           '>1%',
+          //           'last 4 versions',
+          //           'Firefox ESR',
+          //           'not ie < 9', // React doesn't support IE8 anyway
+          //         ],
+          //       }),
+          //     ],
+          //     sourceMap: 'inline',
+          //   },
+          // },
           {
             loader: 'sass',
             options: {
