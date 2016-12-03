@@ -1,5 +1,5 @@
-const path = require('path');
-const autoprefixer = require('autoprefixer');
+// const path = require('path');
+// const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const findCacheDir = require('find-cache-dir');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -9,6 +9,7 @@ const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeM
 const SvgStore = require('webpack-svgstore-plugin');
 const getClientEnvironment = require('./env');
 const paths = require('./paths');
+const babelHelpers = require('../helpers/babel');
 
 const appPackageJson = require(paths.appPackageJson); // eslint-disable-line
 
@@ -23,20 +24,6 @@ const publicUrl = '';
 
 // // Get environment variables to inject into our app.
 const env = getClientEnvironment(publicUrl);
-
-const ensureArray = value => (value.push ? value : [value].filter(v => v));
-
-function addCustomBabelInclude(baseInclude) {
-  const base = baseInclude.push ? baseInclude : [baseInclude];
-  const appConfig = appPackageJson.guzartReactApp;
-  if (!appConfig || !appConfig.babel || !appConfig.babel.include) {
-    return base;
-  }
-
-  const appInclude = ensureArray(appConfig.babel.include);
-  return ensureArray(base)
-    .concat(appInclude.map(paths.resolveRealAppPath));
-}
 
 // This is the development configuration.
 // It is focused on developer experience and fast rebuilds.
@@ -60,7 +47,7 @@ module.exports = {
     require.resolve('./polyfills'),
 
     // Finally, this is your app's code:
-    paths.appIndexJs,
+    paths.appIndexJs
     // We include the app code last so that if there is a runtime error during
     // initialization, it doesn't blow up the WebpackDevServer client, and
     // changing JS code would still trigger a refresh.
@@ -86,17 +73,16 @@ module.exports = {
     // if there any conflicts. This matches Node resolution mechanism.
     // https://github.com/facebookincubator/create-react-app/issues/253
     modules: ['node_modules'].concat(paths.nodePaths),
+
     // These are the reasonable defaults supported by the Node ecosystem.
     // We also include JSX as a common component filename extension to support
     // some tools, although we do not recommend using it, see:
     // https://github.com/facebookincubator/create-react-app/issues/290
     extensions: ['.js', '.json', '.jsx'],
+
     alias: {
       // Support the own application as a package
       [appPackageJson.name]: paths.appSrc,
-      // Support React Native Web
-      // https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
-      'react-native': 'react-native-web',
     },
   },
 
@@ -120,7 +106,7 @@ module.exports = {
       // Process JS with Babel.
       {
         test: /\.(js|jsx)$/,
-        include: addCustomBabelInclude(paths.appSrc),
+        include: babelHelpers.addCustomBabelInclude(paths.appSrc),
         loader: 'babel',
         options: {
           babelrc: false,
@@ -176,7 +162,7 @@ module.exports = {
             options: {
               sourceMap: true,
             },
-          },
+          }
         ],
       },
       // JSON is not enabled by default in Webpack but both Node and Browserify
@@ -204,7 +190,7 @@ module.exports = {
           limit: 10000,
           name: 'static/media/[name].[hash:8].[ext]',
         },
-      },
+      }
     ],
   },
 
@@ -242,7 +228,7 @@ module.exports = {
     // to restart the development server for Webpack to discover it. This plugin
     // makes the discovery automatic so you don't have to restart.
     // See https://github.com/facebookincubator/create-react-app/issues/186
-    new WatchMissingNodeModulesPlugin(paths.appNodeModules),
+    new WatchMissingNodeModulesPlugin(paths.appNodeModules)
   ],
 
   // Some libraries import Node modules but don't use them in the browser.
